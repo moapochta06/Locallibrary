@@ -5,7 +5,7 @@ from django.views.decorators.cache import never_cache
 from django.views.static import serve
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', include('catalog.urls', namespace='')),
+    path('', include('catalog.urls', namespace='')),
 ]
 if settings.DEBUG:
     urlpatterns.append(path('static/<path:path>', never_cache(serve)))

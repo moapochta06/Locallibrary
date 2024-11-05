@@ -39,9 +39,9 @@ class BookInstance(models.Model):
     class Meta:
         ordering = ["due_back"]
 
-
     def __str__(self):
         return '%s (%s)' % (self.id,self.book.title)
+
 
 
 class Genre(models.Model):
@@ -58,6 +58,7 @@ class Genre(models.Model):
 
     def __str__(self):
         return self.name
+    
     
     
 class Book(models.Model):
