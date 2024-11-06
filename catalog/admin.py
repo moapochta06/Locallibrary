@@ -30,10 +30,13 @@ class BooksInstanceInline(admin.TabularInline):
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'display_genre')
-    inlines = [BooksInstanceInline] #чтобы редактировать данные экземпляра книги на странице книги
-    def display_genre(self):
-        return ', '.join([ genre.name for genre in self.genre.all()[:3] ])
-    display_genre.short_description = 'Genre'
+    inlines = [BooksInstanceInline]  # Чтобы редактировать данные экземпляра книги на странице книги
+
+    def display_genre(self, obj):
+        """Возвращает строку с названиями жанров для отображения."""
+        return ', '.join([genre.name for genre in obj.genre.all()[:3]])  # Используйте obj для доступа к жанрам
+    
+    display_genre.short_description = 'Жанр'  # Название столбца в админке
     
 
 

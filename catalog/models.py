@@ -10,14 +10,13 @@ class Author(models.Model):
     date_of_death = models.DateField('Died', null=True, blank=True)
 
     def get_absolute_url(self):
-        """
-    Возвращает URL-адрес для доступа к конкретному экземпляру author.
-        """
-        return reverse('author-detail', args=[str(self.id)])
-
+        return reverse('catalog:author-detail', args=[str(self.id)])
 
     def __str__(self):
         return '%s, %s' % (self.last_name, self.first_name)
+
+    class Meta:
+        ordering = ['last_name']
 
 
 
@@ -60,7 +59,7 @@ class Genre(models.Model):
         return self.name
     
     
-    
+
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
@@ -79,4 +78,4 @@ class Book(models.Model):
         """
         Returns the url to access a particular book instance.
         """
-        return reverse('book-detail', args=[str(self.id)])
+        return reverse('catalog:book-detail', args=[self.pk])
