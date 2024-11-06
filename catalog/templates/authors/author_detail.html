@@ -1,0 +1,21 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+  <h2>Автор</h2>
+  <p><strong>Имя:</strong>{{ author.first_name }}</p>
+  <p><strong>Фамилия:</strong>{{ author.last_name }}</p>
+  <p><strong>Дата рождения:</strong>{{ author.date_of_birth }}</p>
+  <p><strong>Дата смерти:</strong>{{ author.date_of_death }}</p>
+  {% if book_list %}
+  <h3>Книги автора:</h3>
+  <ul>
+    {% for book in book_list %}
+      <li>
+        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>У этого автора нет книг в библиотеке.</p>
+  {% endif %}
+{% endblock %}

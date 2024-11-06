@@ -23,14 +23,16 @@ def index(request):
 class BookListView(generic.ListView):
     model = Book
     template_name = 'books/book_list.html'
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['book_count'] = self.get_queryset().count()  # Count of books
-    #     return context
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book_count'] = self.get_queryset().count()  # Count of books
+        return context
 
 class BookDetailView(generic.DetailView):
     model = Book
     template_name = 'books/book_detail.html' 
+
     def book_detail_view(request,pk):
         try:
             book_id=Book.objects.get(pk=pk)
@@ -42,12 +44,17 @@ class BookDetailView(generic.DetailView):
             context={'book':book_id,}
         )
 
+
 class AuthorListView(generic.ListView):
     model = Author
     template_name = 'authors/author.html'
-    context_object_name = 'author_list' 
+
 
 class AuthorDetailView(generic.DetailView):
     model = Author
     template_name = 'authors/author_detail.html'
     context_object_name = 'author'  
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book_list'] = Book.objects.filter(author=self.object)  # Получаем книги данного автора
+        return context

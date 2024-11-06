@@ -4,8 +4,8 @@ from .views import index, BookListView,BookDetailView,AuthorDetailView,AuthorLis
 app_name = 'catalog'
 
 urlpatterns = [
-    path('', index, name='index'),  # Home page
-    path('books/', BookListView.as_view(), name='books'),  # List of books
+    path('', index, name='index'),
+    path('books/', BookListView.as_view(), name='books'), 
     path('book/<int:pk>/', BookDetailView.as_view(), name='book-detail'),
     path('authors/',AuthorListView.as_view(),name='authors'),
     path('authors/<int:pk>/', AuthorDetailView.as_view(), name='author-detail'),
