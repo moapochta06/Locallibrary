@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib.auth.views import LogoutView
 from .models import Book, Author, BookInstance, Genre
 from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Author
 
 
 def index(request):
@@ -26,8 +29,6 @@ class BBLoginView(LoginView):
 
 class BBLogoutView(LoginRequiredMixin, LogoutView):
     template_name = 'user/logged_out.html'
-
-
 
 class BookListView(generic.ListView):
     model = Book
@@ -69,5 +70,22 @@ class AuthorDetailView(generic.DetailView):
         return context
     
 
+class LibrarianRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.groups.filter(name='Librarians').exists()
 
-    
+class AuthorCreate(LoginRequiredMixin, LibrarianRequiredMixin,CreateView):
+    model = Author
+    fields = '__all__'
+    template_name = 'authors/author_form.html'
+    initial = {'date_of_death': '12/10/2016',}
+
+class AuthorUpdate(LoginRequiredMixin, LibrarianRequiredMixin,UpdateView):
+    model = Author
+    template_name = 'authors/author_form.html'
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+
+class AuthorDelete(LoginRequiredMixin, LibrarianRequiredMixin,DeleteView):
+    model = Author
+    template_name = 'authors/author_confirm_delete.html'
+    success_url = reverse_lazy('catalog:authors')  
