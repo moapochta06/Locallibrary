@@ -24,6 +24,22 @@
               <li><a href="{% url 'catalog:index' %}">Home</a></li>
               <li><a href="{% url 'catalog:books' %}">All books</a></li>
               <li><a href="{% url 'catalog:authors' %}">All authors</a></li>
+            {% if user.is_authenticated %}
+              <li>User: {{ user.get_username }}</li>
+              <li> 
+                <form method="post" action="{% url 'catalog:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="">Logout</button>
+              </form>
+            </li>
+            {% else %}
+              <li>
+                <form method="post" action="{% url 'catalog:login' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="">Login</button>
+                </form>
+              </li>
+            {% endif %}
             </ul>
           {% endblock %}
         </div>

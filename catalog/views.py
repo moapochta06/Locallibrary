@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LogoutView
 from .models import Book, Author, BookInstance, Genre
 from django.views import generic
 
@@ -18,6 +21,12 @@ def index(request):
         'main/index.html',
         context={'num_books':num_books,'num_instances':num_instances,'num_instances_available':num_instances_available,'num_authors':num_authors},
     )
+class BBLoginView(LoginView):
+    template_name = 'user/login.html'
+
+class BBLogoutView(LoginRequiredMixin, LogoutView):
+    template_name = 'user/logged_out.html'
+
 
 
 class BookListView(generic.ListView):
@@ -58,3 +67,7 @@ class AuthorDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['book_list'] = Book.objects.filter(author=self.object)  # Получаем книги данного автора
         return context
+    
+
+
+    
