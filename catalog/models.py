@@ -64,18 +64,24 @@ class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
     summary = models.TextField(max_length=1000, help_text="Enter a brief description of the book")
-    isbn = models.CharField('ISBN',max_length=13, help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>')
+    isbn = models.CharField('ISBN', max_length=13, help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>')
     genre = models.ManyToManyField(Genre, help_text="Select a genre for this book")
 
+    RATING_CHOICES = [
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    ]
+
+    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, null=True, blank=True,
+                                               help_text="Rate this book from 1 to 5")
+
     def __str__(self):
-        """
-        String for representing the Model object.
-        """
+        """String for representing the Model object."""
         return self.title
 
-
     def get_absolute_url(self):
-        """
-        Returns the url to access a particular book instance.
-        """
+        """Returns the url to access a particular book instance."""
         return reverse('catalog:book-detail', args=[self.pk])

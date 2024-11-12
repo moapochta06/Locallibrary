@@ -1,19 +1,32 @@
 {% extends "layout/base.html" %}
 
 {% block content %}
-    <h1>Book List</h1>
-    <p>Всего книг: {{ book_count }}</p>
-    {% if book_list %}
-    <ul>
+<h1>Список книг</h1>
+<p>Всего книг: {{ book_list.count }}</p>
 
-      {% for book in book_list %}
-      <li>
-        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> ({{book.author}})
-      </li>
-      {% endfor %}
+<h2>Фильтр книг по рейтингу</h2>
+<form method="get" action="{% url 'catalog:books' %}">
+    <label for="rating">Выберите рейтинг:</label>
+    <select name="rating" id="rating">
+        <option value="">Все рейтинги</option>
+        <option value="1" {% if request.GET.rating == "1" %}selected{% endif %}>1</option>
+        <option value="2" {% if request.GET.rating == "2" %}selected{% endif %}>2</option>
+        <option value="3" {% if request.GET.rating == "3" %}selected{% endif %}>3</option>
+        <option value="4" {% if request.GET.rating == "4" %}selected{% endif %}>4</option>
+        <option value="5" {% if request.GET.rating == "5" %}selected{% endif %}>5</option>
+    </select>
+    <button type="submit">Фильтровать</button>
+</form>
 
-    </ul>
-    {% else %}
-      <p>There are no books in the library.</p>
-    {% endif %}
+{% if book_list %}
+<ul>
+    {% for book in book_list %}
+    <li>
+        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> ({{ book.author }}) - Рейтинг: {{ book.rating }}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Книги с выбранным рейтингом не найдены.</p> 
+{% endif %}
 {% endblock %}

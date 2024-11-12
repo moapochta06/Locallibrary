@@ -33,11 +33,16 @@ class BBLogoutView(LoginRequiredMixin, LogoutView):
 class BookListView(generic.ListView):
     model = Book
     template_name = 'books/book_list.html'
+    context_object_name = 'book_list' 
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['book_count'] = self.get_queryset().count()  # Count of books
-        return context
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        rating_filter = self.request.GET.get('rating')
+
+        if rating_filter:
+            queryset = queryset.filter(rating=rating_filter)
+
+        return queryset.order_by('-rating')
 
 class BookDetailView(generic.DetailView):
     model = Book

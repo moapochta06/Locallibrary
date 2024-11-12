@@ -29,7 +29,7 @@ class BooksInstanceInline(admin.TabularInline):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'display_genre')
+    list_display = ('title', 'author', 'display_genre','rating')
     inlines = [BooksInstanceInline]  # Чтобы редактировать данные экземпляра книги на странице книги
 
     def display_genre(self, obj):
